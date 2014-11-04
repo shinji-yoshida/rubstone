@@ -35,7 +35,9 @@ libs:
 
 2. Execute:
 
-    rubstone install
+```
+rubstone install
+```
 
 ### Library Update
 
