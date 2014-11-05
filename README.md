@@ -4,7 +4,10 @@ This is library manager for Unity3d.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+To avoid problem, it is better to use rvm to manage this gem.
+Please see [here](http://rvm.io/).
+
+To install rubstone, add this line to your application's Gemfile:
 
     gem 'rubstone', github: "shinji-yoshida/rubstone", branch: "v0.0.1"
 
@@ -48,7 +51,7 @@ For example, when you are developing *gotanda*, execute:
 
     rubstone dev_import gotanda
 
-Then all modifications in `Assets/Libs/gotanda` is copied into `vendor/.rubstone/gotanda`.
+Then all modifications in `Assets/Libs/gotanda` are copied into `vendor/.rubstone/gotanda`.
 Then you can commit and push the modifications within `vendor/.rubstone/gotanda`.
 
 ## Contributing
