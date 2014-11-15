@@ -46,7 +46,7 @@ module Rubstone
     end
 
     def pull
-      system("cd #{cache_path} ; git pull")
+      system("cd #{cache_path} ; git pull --rebase")
     end
 
     public
