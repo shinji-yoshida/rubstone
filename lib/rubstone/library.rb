@@ -23,30 +23,22 @@ module Rubstone
 
     def update_cache
       if File.exist? cache_path
-        pull
-        checkout_ref
+        git_action.pull
+        git_action.checkout_ref(ref)
       else
-        git_clone
-        checkout_ref
+        git_action.git_clone(repository)
+        git_action.checkout_ref(ref)
       end
     end
 
     private
 
+    def git_action
+      Rubstone::GitAction.new(cache_path)
+    end
+
     def cache_path
-      File.join(@config.cache_root, name)
-    end
-
-    def git_clone
-      system("git clone #{repository} #{cache_path}")
-    end
-
-    def checkout_ref
-      system("cd #{cache_path} ; git checkout #{ref}")
-    end
-
-    def pull
-      system("cd #{cache_path} ; git pull --rebase")
+      @config.cache_path(name)
     end
 
     public
@@ -84,7 +76,7 @@ module Rubstone
     end
 
     def dest_lib_path
-      File.join(@config.lib_root, name)
+      @config.dest_lib_path(name)
     end
 
     public
