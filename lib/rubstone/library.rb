@@ -6,65 +6,77 @@ module Rubstone
     attr_reader :name
     attr_reader :repository
     attr_reader :ref
+    attr_reader :config
 
     def initialize(hash, config)
-      hash.assert_valid_keys("name", "repository", "ref", "lib_root")
+      hash.assert_valid_keys("name", "repository", "ref", "lib_root", "directories")
       @name = hash["name"]
       @repository = hash["repository"]
       @ref = hash["ref"]
       @lib_root = hash["lib_root"]
+      @directories = hash["directories"]
       raise "name is not set" if @name.blank?
       raise "repository is not set" if @repository.blank?
       raise "ref is not set" if @ref.blank?
-      raise "lib_root is not set" if @lib_root.blank?
+      if @lib_root.blank? && @directories.blank?
+        raise "lib_root or directories should be set"
+      end
 
       @config = config
+      if @directories.present?
+        @tagged_directory_map = Rubstone::TaggedDirectoryMap.new(@directories)
+      end
     end
 
     def update_cache
       if File.exist? cache_path
-        pull
-        checkout_ref
+        git_action.pull
+        git_action.checkout_ref(ref)
       else
-        git_clone
-        checkout_ref
+        git_action.git_clone(repository)
+        git_action.checkout_ref(ref)
       end
     end
 
     private
 
+    def git_action
+      Rubstone::GitAction.new(cache_path)
+    end
+
     def cache_path
-      File.join(@config.cache_root, name)
-    end
-
-    def git_clone
-      system("git clone #{repository} #{cache_path}")
-    end
-
-    def checkout_ref
-      system("cd #{cache_path} ; git checkout #{ref}")
-    end
-
-    def pull
-      system("cd #{cache_path} ; git pull --rebase")
+      @config.cache_path(name)
     end
 
     public
 
+    def directory_relations
+      if @tagged_directory_map.nil?
+        return [Rubstone::DirectoryRelation.new(cache_lib_path, dest_lib_path)]
+      end
+
+      @tagged_directory_map.tags.map { |tag|
+        Rubstone::DirectoryRelation.new(@config.repository_subdir(name, @tagged_directory_map.directory(tag)), @config.copied_subdir(name, tag))
+      }
+    end
+
     def copy_lib
-      FileUtils.mkdir_p dest_lib_path
-      cache_lib_directory = cache_lib_path.end_with?("/") ? cache_lib_path : "#{cache_lib_path}/"
-      system("cp -R #{cache_lib_directory} #{dest_lib_path}")
-      system("rm -rf #{dest_lib_path}/.git")
+      Rubstone::CopyLibrary.new(self).copy_lib
     end
 
     def delete_removed_files
-      dest_files = Dir.glob(File.join(dest_lib_path, "**/*")).reject{ |fn|
+      directory_relations.each do |rel|
+        delete_each_removed_files(rel.repository_dir, rel.copied_dir)
+      end
+    end
+
+    def delete_each_removed_files(repository_dir, copied_dir)
+      dest_files = Dir.glob(File.join(copied_dir, "**/*")).reject{ |fn|
         File.extname(fn) == ".meta"
       }
       delete_files = dest_files.reject{ |fn|
-        relative_path = fn.sub(dest_lib_path, '')
-        File.exist? File.join(cache_lib_path, relative_path)
+        relative_path = fn.sub(copied_dir, '')
+        File.exist? File.join(repository_dir, relative_path)
       }
 
       delete_files.each do |f|
@@ -73,18 +85,18 @@ module Rubstone
       end
     end
 
-    private
-
     def cache_lib_path
       File.join(cache_path, lib_root)
     end
 
-    def lib_root
-      @lib_root
+    def dest_lib_path
+      @config.dest_lib_path(name)
     end
 
-    def dest_lib_path
-      File.join(@config.lib_root, name)
+    private
+
+    def lib_root
+      @lib_root
     end
 
     public
