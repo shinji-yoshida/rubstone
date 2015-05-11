@@ -3,6 +3,7 @@ require 'fileutils'
 require 'rubstone/config'
 require 'rubstone/library'
 require 'rubstone/rubfile'
+require 'rubstone/git_action'
 
 module Rubstone
   class Runner
