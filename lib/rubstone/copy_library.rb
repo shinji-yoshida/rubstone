@@ -9,7 +9,7 @@ module Rubstone
     end
 
     def legacy_copy_lib
-      copy_dir(@library.cache_lib_path, dest_lib_path)
+      copy_dir(@library.cache_lib_path, @library.dest_lib_path)
     end
 
     def copy_dir(src_path, dst_path)
