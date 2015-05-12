@@ -66,7 +66,7 @@ module Rubstone
 
     def delete_removed_files
       directory_relations.each do |rel|
-        delete_removed_files(rel.repository_dir, rel.copied_dir)
+        delete_each_removed_files(rel.repository_dir, rel.copied_dir)
       end
     end
 
