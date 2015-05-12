@@ -23,7 +23,9 @@ module Rubstone
       end
 
       @config = config
-      @tagged_directory_map = Rubstone::TaggedDirectoryMap.new(@directories)
+      if @directories.present?
+        @tagged_directory_map = Rubstone::TaggedDirectoryMap.new(@directories)
+      end
     end
 
     def update_cache
