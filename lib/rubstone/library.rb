@@ -57,13 +57,15 @@ module Rubstone
 
     def delete_removed_files
       directory_relation = directory_relations.first
+      repository_dir = directory_relation.repository_dir
+      copied_dir = directory_relation.copied_dir
 
-      dest_files = Dir.glob(File.join(dest_lib_path, "**/*")).reject{ |fn|
+      dest_files = Dir.glob(File.join(copied_dir, "**/*")).reject{ |fn|
         File.extname(fn) == ".meta"
       }
       delete_files = dest_files.reject{ |fn|
-        relative_path = fn.sub(dest_lib_path, '')
-        File.exist? File.join(cache_lib_path, relative_path)
+        relative_path = fn.sub(copied_dir, '')
+        File.exist? File.join(repository_dir, relative_path)
       }
 
       delete_files.each do |f|
