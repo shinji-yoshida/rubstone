@@ -9,7 +9,7 @@ module Rubstone
     attr_reader :config
 
     def initialize(hash, config)
-      hash.assert_valid_keys("name", "repository", "ref", "lib_root")
+      hash.assert_valid_keys("name", "repository", "ref", "lib_root", "directories")
       @name = hash["name"]
       @repository = hash["repository"]
       @ref = hash["ref"]
