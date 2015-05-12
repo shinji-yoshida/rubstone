@@ -56,7 +56,7 @@ module Rubstone
       end
 
       @tagged_directory_map.tags.map { |tag|
-        Rubstone::DirectoryRelation.new(@config.repository_subdir(name, tag), @config.copied_subdir(name, @tagged_directory_map.directory(tag)))
+        Rubstone::DirectoryRelation.new(@config.repository_subdir(name, @tagged_directory_map.directory(tag)), @config.copied_subdir(name, tag))
       }
     end
 
