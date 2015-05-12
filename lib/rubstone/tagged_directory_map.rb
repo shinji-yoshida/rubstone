@@ -3,7 +3,7 @@ require 'active_support/core_ext'
 require 'fileutils'
 
 module Rubstone
-  class TaggedDiretoryMap
+  class TaggedDirectoryMap
     attr_reader :tag_dir_map
 
     def initialize(hash)

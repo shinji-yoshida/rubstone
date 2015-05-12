@@ -19,7 +19,7 @@ module Rubstone
         raise "lib_root or directories should be set"
       end
       if @dirctories.present?
-        @tagged_directory_map = Rubstone::TaggedDiretoryMap.new(@directories)
+        @tagged_directory_map = Rubstone::TaggedDirectoryMap.new(@directories)
       end
     end
 
