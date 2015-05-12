@@ -48,6 +48,8 @@ module Rubstone
       @config.cache_path(name)
     end
 
+    public
+
     def directory_relations
       if @tagged_directory_map.nil?
         return [Rubstone::DirectoryRelation.new(cache_lib_path, dest_lib_path)]
@@ -57,8 +59,6 @@ module Rubstone
         Rubstone::DirectoryRelation.new(@config.repository_subdir(name, tag), @config.copied_subdir(name, @tagged_directory_map.directory(tag)))
       }
     end
-
-    public
 
     def copy_lib
       Rubstone::CopyLibrary.new(self).copy_lib
