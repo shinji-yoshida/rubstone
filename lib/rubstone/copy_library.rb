@@ -2,6 +2,7 @@ module Rubstone
   class CopyLibrary
     def initialize(library)
       @library = library
+      @config = @library.config
     end
 
     def copy_lib

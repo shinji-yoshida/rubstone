@@ -7,6 +7,7 @@ module Rubstone
     attr_reader :cache_root
     attr_reader :lib_root
     attr_reader :dirctories
+    attr_reader :tagged_directory_map
 
     def initialize(hash)
       hash.assert_valid_keys("cache_root", "lib_root")
@@ -16,6 +17,9 @@ module Rubstone
       raise "cache_root is not set" if @cache_root.blank?
       if @lib_root.blank? && @dirctories.blank?
         raise "lib_root or directories should be set"
+      end
+      if @dirctories.present?
+        @tagged_directory_map = Rubstone::TaggedDiretoryMap.new(directories)
       end
     end
 

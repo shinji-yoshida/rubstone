@@ -6,6 +6,7 @@ module Rubstone
     attr_reader :name
     attr_reader :repository
     attr_reader :ref
+    attr_reader :config
 
     def initialize(hash, config)
       hash.assert_valid_keys("name", "repository", "ref", "lib_root")
@@ -41,6 +42,10 @@ module Rubstone
       @config.cache_path(name)
     end
 
+    def directory_relations
+      [Rubstone::DirectoryRelation.new(cache_lib_path, dest_lib_path)]
+    end
+
     public
 
     def copy_lib
@@ -48,6 +53,8 @@ module Rubstone
     end
 
     def delete_removed_files
+      directory_relation = directory_relations.first
+
       dest_files = Dir.glob(File.join(dest_lib_path, "**/*")).reject{ |fn|
         File.extname(fn) == ".meta"
       }

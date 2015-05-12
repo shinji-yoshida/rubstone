@@ -5,6 +5,8 @@ require 'rubstone/library'
 require 'rubstone/rubfile'
 require 'rubstone/git_action'
 require 'rubstone/copy_library'
+require 'rubstone/tagged_directory_map'
+require 'rubstone/directory_relation'
 
 module Rubstone
   class Runner
