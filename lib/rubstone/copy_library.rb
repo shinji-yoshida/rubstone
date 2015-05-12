@@ -6,8 +6,9 @@ module Rubstone
     end
 
     def copy_lib
-      directory_relation = @library.directory_relations.first
-      copy_dir(directory_relation.repository_dir, directory_relation.copied_dir)
+      @library.directory_relations.each do |rel|
+        copy_dir(rel.repository_dir, rel.copied_dir)
+      end
     end
 
     def copy_dir(src_path, dst_path)
