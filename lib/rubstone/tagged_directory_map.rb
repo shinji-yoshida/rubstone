@@ -9,5 +9,13 @@ module Rubstone
     def initialize(hash)
       @tag_dir_map = hash
     end
+
+    def tags
+      @tag_dir_map.keys
+    end
+
+    def directory(tag)
+      @tag_dir_map[tag]
+    end
   end
 end

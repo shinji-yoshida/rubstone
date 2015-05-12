@@ -34,5 +34,13 @@ module Rubstone
     def dest_lib_path(name)
       File.join(lib_root, name)
     end
+
+    def repository_subdir(lib_name, tag)
+      File.join(cache_root, lib_name, @tagged_directory_map.directories(tag))
+    end
+
+    def copied_subdir(lib_name, subdir)
+      File.join(lib_root, lib_name, subdir)
+    end
   end
 end

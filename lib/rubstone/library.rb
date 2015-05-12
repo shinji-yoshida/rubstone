@@ -23,6 +23,7 @@ module Rubstone
       end
 
       @config = config
+      @tagged_directory_map = Rubstone::TaggedDirectoryMap.new(@directories)
     end
 
     def update_cache
@@ -46,7 +47,13 @@ module Rubstone
     end
 
     def directory_relations
-      [Rubstone::DirectoryRelation.new(cache_lib_path, dest_lib_path)]
+      if @tagged_directory_map.nil?
+        return [Rubstone::DirectoryRelation.new(cache_lib_path, dest_lib_path)]
+      end
+
+      @tagged_directory_map.tags.map { |tag|
+        Rubstone::DirectoryRelation.new(@config.repository_subdir(name, tag), @config.copied_subdir(name, @tagged_directory_map.directory(tag)))
+      }
     end
 
     public
