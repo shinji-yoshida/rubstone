@@ -7,6 +7,7 @@ module Rubstone
     attr_reader :tag_dir_map
 
     def initialize(hash)
+      raise "hash is nil" if hash.nil?
       @tag_dir_map = hash
     end
 
