@@ -14,10 +14,13 @@ module Rubstone
       @repository = hash["repository"]
       @ref = hash["ref"]
       @lib_root = hash["lib_root"]
+      @directories = hash["directories"]
       raise "name is not set" if @name.blank?
       raise "repository is not set" if @repository.blank?
       raise "ref is not set" if @ref.blank?
-      raise "lib_root is not set" if @lib_root.blank?
+      if @lib_root.blank? && @directories.blank?
+        raise "lib_root or directories should be set"
+      end
 
       @config = config
     end
