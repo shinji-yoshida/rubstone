@@ -6,11 +6,8 @@ module Rubstone
     end
 
     def copy_lib
-      legacy_copy_lib
-    end
-
-    def legacy_copy_lib
-      copy_dir(@library.cache_lib_path, @library.dest_lib_path)
+      directory_relation = @library.directory_relations.first
+      copy_dir(directory_relation.repository_dir, directory_relation.copied_dir)
     end
 
     def copy_dir(src_path, dst_path)
