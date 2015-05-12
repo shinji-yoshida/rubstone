@@ -10,7 +10,7 @@ module Rubstone
     attr_reader :tagged_directory_map
 
     def initialize(hash)
-      hash.assert_valid_keys("cache_root", "lib_root")
+      hash.assert_valid_keys("cache_root", "lib_root", "directories")
       @cache_root = hash["cache_root"]
       @lib_root = hash["lib_root"]
       @dirctories = hash["directories"]
