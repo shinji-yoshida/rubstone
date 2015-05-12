@@ -13,6 +13,7 @@ module Rubstone
     def copy_dir(src_path, dst_path)
       FileUtils.mkdir_p dst_path
       src_path = src_path.end_with?("/") ? src_path : "#{src_path}/"
+      puts "cp -R #{src_path} #{dst_path}"
       system("cp -R #{src_path} #{dst_path}")
       system("rm -rf #{dst_path}/.git")
     end
