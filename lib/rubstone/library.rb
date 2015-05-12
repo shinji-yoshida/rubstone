@@ -9,9 +9,7 @@ module Rubstone
     attr_reader :config
 
     def initialize(hash, config)
-      assert_have_key(hash, "name")
-      assert_have_key(hash, "repository")
-      assert_have_key(hash, "ref")
+      hash.assert_valid_keys("name", "repository", "ref", "lib_root", "directories")
       @name = hash["name"]
       @repository = hash["repository"]
       @ref = hash["ref"]
@@ -35,10 +33,6 @@ module Rubstone
     end
 
     private
-
-    def assert_have_key(hash, key)
-      raise "#{key} not found" if hash[key].nil?
-    end
 
     def git_action
       Rubstone::GitAction.new(cache_path)
