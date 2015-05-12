@@ -4,6 +4,7 @@ require 'rubstone/config'
 require 'rubstone/library'
 require 'rubstone/rubfile'
 require 'rubstone/git_action'
+require 'rubstone/copy_library'
 
 module Rubstone
   class Runner

@@ -44,10 +44,7 @@ module Rubstone
     public
 
     def copy_lib
-      FileUtils.mkdir_p dest_lib_path
-      cache_lib_directory = cache_lib_path.end_with?("/") ? cache_lib_path : "#{cache_lib_path}/"
-      system("cp -R #{cache_lib_directory} #{dest_lib_path}")
-      system("rm -rf #{dest_lib_path}/.git")
+      Rubstone::CopyLibrary.new(self).copy_lib
     end
 
     def delete_removed_files
@@ -65,18 +62,18 @@ module Rubstone
       end
     end
 
-    private
-
     def cache_lib_path
       File.join(cache_path, lib_root)
     end
 
-    def lib_root
-      @lib_root
-    end
-
     def dest_lib_path
       @config.dest_lib_path(name)
+    end
+
+    private
+
+    def lib_root
+      @lib_root
     end
 
     public
