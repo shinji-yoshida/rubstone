@@ -12,7 +12,7 @@ require 'rubstone/directory_relation'
 module Rubstone
   class Runner
     def run
-      command = ARGV[0]
+      command = ARGV.delete_at(0)
 
       rubfile = Rubstone::Rubfile.new(YAML.load_file("./Rubfile"))
 
@@ -25,7 +25,7 @@ module Rubstone
           lib.copy_lib
         end
       when "dev_import"
-        target = ARGV.delete_at(1)
+        target = ARGV.delete_at(0)
         opts = ARGV.getopts("m")
         lib = rubfile.find_library(target)
         lib.dev_import(opts)
