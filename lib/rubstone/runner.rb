@@ -25,8 +25,8 @@ module Rubstone
           lib.copy_lib
         end
       when "dev_import"
-        target = ARGV.delete_at(0)
         opts = ARGV.getopts("m")
+        target = ARGV.delete_at(0)
         lib = rubfile.find_library(target)
         lib.dev_import(opts)
       else
