@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'rubstone/runner.rb'
 
-Rubstone::Runner.new(ARGV).run
+Rubstone::Runner.new.run
