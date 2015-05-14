@@ -104,6 +104,7 @@ module Rubstone
     def dev_import(opts)
       p opts
       include_metafile = opts["m"].present?
+      p ARGV
       p include_metafile
 
       dest_lib_directory = dest_lib_path.end_with?("/") ? dest_lib_path : "#{dest_lib_path}/"
