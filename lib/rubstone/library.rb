@@ -101,10 +101,15 @@ module Rubstone
 
     public
 
-    def dev_import
+    def dev_import(opts)
+      include_metafile = opts["m"].present?
+
       dest_lib_directory = dest_lib_path.end_with?("/") ? dest_lib_path : "#{dest_lib_path}/"
       system("rm -rf #{cache_lib_path}")
       system("cp -R #{dest_lib_directory} #{cache_lib_path}")
+
+      return if include_metafile
+
       meta_files = Dir.glob(File.join(cache_lib_path, "**/*")).select{|f|
         File.extname(f) == ".meta"
       }

@@ -1,5 +1,6 @@
 require 'yaml'
 require 'fileutils'
+require 'optparse'
 require 'rubstone/config'
 require 'rubstone/library'
 require 'rubstone/rubfile'
@@ -10,14 +11,10 @@ require 'rubstone/directory_relation'
 
 module Rubstone
   class Runner
-    def initialize(argv)
-      @argv = argv
-      command = argv[0]
-    end
-
     def run
+      command = ARGV[0]
+
       rubfile = Rubstone::Rubfile.new(YAML.load_file("./Rubfile"))
-      command = @argv[0]
 
       case command
       when "install"
@@ -28,9 +25,10 @@ module Rubstone
           lib.copy_lib
         end
       when "dev_import"
-        target = @argv[1]
+        opts = ARGV.getopts("m")
+        target = ARGV[1]
         lib = rubfile.find_library(target)
-        lib.dev_import
+        lib.dev_import(opts)
       else
         puts "unknown command #{command}"
       end
