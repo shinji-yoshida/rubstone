@@ -7,13 +7,13 @@ module Rubstone
 
     def copy_lib(excludes=[])
       @library.directory_relations.each do |rel|
-        copy_dir(rel.repository_dir, rel.copied_dir, excludes)
+        copy_dir(rel.repository_dir, rel.copied_dir, excludes + rel.exclusions)
       end
     end
 
     def reverse_copy_lib(excludes=[])
       @library.directory_relations.each do |rel|
-        copy_dir(rel.copied_dir, rel.repository_dir, excludes)
+        copy_dir(rel.copied_dir, rel.repository_dir, excludes + rel.exclusions)
       end
     end
 
