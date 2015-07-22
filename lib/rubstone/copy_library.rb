@@ -21,8 +21,8 @@ module Rubstone
       local_excludes = excludes + [".git"]
       exclude_phrase = local_excludes.map{|e| "--exclude=\"#{e}\""}.join(" ")
       src_path = src_path.end_with?("/") ? src_path : "#{src_path}/"
-      puts "rsync -r #{exclude_phrase} --delete \"#{src_path}\" \"#{dst_path}\""
-      system("rsync -r #{exclude_phrase} --delete \"#{src_path}\" \"#{dst_path}\"")
+      puts "rsync -a #{exclude_phrase} --delete \"#{src_path}\" \"#{dst_path}\""
+      system("rsync -a #{exclude_phrase} --delete \"#{src_path}\" \"#{dst_path}\"")
     end
   end
 end
