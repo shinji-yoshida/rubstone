@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module Rubstone
   class CopyLibrary
     def initialize(library)
@@ -18,6 +20,8 @@ module Rubstone
     end
 
     def copy_dir(src_path, dst_path, excludes=[])
+      FileUtils.mkdir_p(File.dirname(src_path))
+      FileUtils.mkdir_p(File.dirname(dst_path))
       local_excludes = excludes + [".git"]
       exclude_phrase = local_excludes.map{|e| "--exclude=\"#{e}\""}.join(" ")
       src_path = src_path.end_with?("/") ? src_path : "#{src_path}/"
