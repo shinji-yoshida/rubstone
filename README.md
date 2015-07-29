@@ -54,7 +54,7 @@ For example, when you are developing *Lockables*, execute:
 
     rubstone dev_import Lockables
 
-Then all modifications in `Assets/Plugins/Rubstone/Lockables` is copied into `vendor/rubstone/Lockables`.
+Then all modifications in `Assets/Plugins/Rubstone/Lockables` are copied into `vendor/rubstone/Lockables`.
 Then you can commit and push the modifications within `vendor/rubstone/Lockables`.
 
 ## Contributing
