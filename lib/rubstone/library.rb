@@ -5,13 +5,15 @@ module Rubstone
   class Library
     attr_reader :name
     attr_reader :repository
+    attr_reader :include_metafile
     attr_reader :ref
     attr_reader :config
 
     def initialize(hash, config)
-      hash.assert_valid_keys("name", "repository", "ref", "lib_root", "directories")
+      hash.assert_valid_keys("name", "repository", "include_metafile", "ref", "lib_root", "directories")
       @name = hash["name"]
       @repository = hash["repository"]
+      @include_metafile = hash["include_metafile"]
       @ref = hash["ref"]
       @lib_root = hash["lib_root"]
       @directories = hash["directories"]
@@ -56,33 +58,19 @@ module Rubstone
       end
 
       @tagged_directory_map.tags.map { |tag|
-        Rubstone::DirectoryRelation.new(@config.repository_subdir(name, @tagged_directory_map.directory(tag)), @config.copied_subdir(name, tag))
+        tagged_dir = @tagged_directory_map.tagged_directory(tag)
+        Rubstone::DirectoryRelation.new(
+          @config.repository_subdir(name, tagged_dir.path),
+          @config.copied_subdir(name, tag),
+          tagged_dir.exclusions
+          )
       }
     end
 
     def copy_lib
-      Rubstone::CopyLibrary.new(self).copy_lib
-    end
+      excludes = include_metafile ? [] : ["*.meta"]
 
-    def delete_removed_files
-      directory_relations.each do |rel|
-        delete_each_removed_files(rel.repository_dir, rel.copied_dir)
-      end
-    end
-
-    def delete_each_removed_files(repository_dir, copied_dir)
-      dest_files = Dir.glob(File.join(copied_dir, "**/*")).reject{ |fn|
-        File.extname(fn) == ".meta"
-      }
-      delete_files = dest_files.reject{ |fn|
-        relative_path = fn.sub(copied_dir, '')
-        File.exist? File.join(repository_dir, relative_path)
-      }
-
-      delete_files.each do |f|
-        system("rm -rf #{f}")
-        system("rm -rf #{f}.meta")
-      end
+      Rubstone::CopyLibrary.new(self).copy_lib(excludes)
     end
 
     def cache_lib_path
@@ -101,21 +89,10 @@ module Rubstone
 
     public
 
-    def dev_import(opts)
-      include_metafile = opts["m"].present?
+    def dev_import
+      excludes = include_metafile ? [] : ["*.meta"]
 
-      dest_lib_directory = dest_lib_path.end_with?("/") ? dest_lib_path : "#{dest_lib_path}/"
-      system("rm -rf #{cache_lib_path}")
-      system("cp -R #{dest_lib_directory} #{cache_lib_path}")
-
-      return if include_metafile
-
-      meta_files = Dir.glob(File.join(cache_lib_path, "**/*")).select{|f|
-        File.extname(f) == ".meta"
-      }
-      meta_files.each do |f|
-        system("rm #{f}")
-      end
+      Rubstone::CopyLibrary.new(self).reverse_copy_lib(excludes)
     end
   end
 end

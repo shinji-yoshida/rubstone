@@ -21,14 +21,19 @@ module Rubstone
         rubfile.libraries.each do |lib|
           puts "update #{lib.name}"
           lib.update_cache
-          lib.delete_removed_files
           lib.copy_lib
         end
-      when "dev_import"
-        opts = ARGV.getopts("m")
+      when "update"
         target = ARGV.delete_at(0)
+        puts "update #{target}"
         lib = rubfile.find_library(target)
-        lib.dev_import(opts)
+        lib.update_cache
+        lib.copy_lib
+      when "dev_import"
+        target = ARGV.delete_at(0)
+        puts "import #{target}"
+        lib = rubfile.find_library(target)
+        lib.dev_import
       else
         puts "unknown command #{command}"
       end
