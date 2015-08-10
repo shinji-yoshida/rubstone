@@ -14,7 +14,7 @@ module Rubstone
       @name = hash["name"]
       @repository = hash["repository"]
       @include_metafile = hash["include_metafile"]
-      @ref = hash["ref"]
+      @ref = hash["ref"] || "master"
       @lib_root = hash["lib_root"]
       @directories = hash["directories"]
       raise "name is not set" if @name.blank?
