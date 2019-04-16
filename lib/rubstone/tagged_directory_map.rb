@@ -1,9 +1,9 @@
-require 'active_support'
-require 'active_support/core_ext'
 require 'fileutils'
 
 module Rubstone
   class TaggedDirectoryMap
+    include Helper
+
     attr_reader :tag_dir_map
 
     def initialize(hash)

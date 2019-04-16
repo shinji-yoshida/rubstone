@@ -1,16 +1,15 @@
-require 'active_support'
-require 'active_support/core_ext'
 
 module Rubstone
   class Rubfile
+    include Helper
+
     attr_reader :config
     attr_reader :libraries
 
     def initialize(hash)
-      hash.assert_valid_keys("config", "libs")
       config_hash = hash["config"]
       libs = hash["libs"]
-      raise "config is not set" if config_hash.blank?
+      raise "config is not set" if hash_blank?(config_hash)
 
       @config = Rubstone::Config.new(config_hash)
       @libraries = libs.map{|lib| Rubstone::Library.new(lib, @config)}
