@@ -14,6 +14,4 @@ Gem::Specification.new do |gem|
   gem.name          = "rubstone"
   gem.require_paths = ["lib"]
   gem.version       = Rubstone::VERSION
-
-  gem.add_dependency 'activesupport', '~> 4.1'
 end
