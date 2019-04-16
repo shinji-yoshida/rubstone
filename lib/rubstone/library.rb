@@ -1,8 +1,8 @@
-require 'active_support'
-require 'active_support/core_ext'
 
 module Rubstone
   class Library
+    include Helper
+
     attr_reader :name
     attr_reader :repository
     attr_reader :include_metafile
@@ -10,22 +10,21 @@ module Rubstone
     attr_reader :config
 
     def initialize(hash, config)
-      hash.assert_valid_keys("name", "repository", "include_metafile", "ref", "lib_root", "directories")
       @name = hash["name"]
       @repository = hash["repository"]
       @include_metafile = hash["include_metafile"]
       @ref = hash["ref"] || "master"
       @lib_root = hash["lib_root"]
       @directories = hash["directories"]
-      raise "name is not set" if @name.blank?
-      raise "repository is not set" if @repository.blank?
-      raise "ref is not set" if @ref.blank?
-      if @lib_root.blank? && @directories.blank?
+      raise "name is not set" if string_blank?(@name)
+      raise "repository is not set" if string_blank?(@repository)
+      raise "ref is not set" if string_blank?(@ref)
+      if hash_blank?(@lib_root) && hash_blank?(@directories)
         raise "lib_root or directories should be set"
       end
 
       @config = config
-      if @directories.present?
+      if hash_present?(@directories)
         @tagged_directory_map = Rubstone::TaggedDirectoryMap.new(@directories)
       end
     end

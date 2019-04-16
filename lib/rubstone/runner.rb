@@ -1,6 +1,7 @@
 require 'yaml'
 require 'fileutils'
 require 'optparse'
+require 'rubstone/helper'
 require 'rubstone/config'
 require 'rubstone/library'
 require 'rubstone/rubfile'
